@@ -1,9 +1,14 @@
-from django.shortcuts import render
+from django.shortcuts import render,  redirect
 from django.http import JsonResponse
 import json
 import datetime
 from .models import *
 from .utils import cookieCart, cartData, guestOrder
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
+
+from store.forms import SignUpForm
 
 
 def store(request):
@@ -38,6 +43,39 @@ def checkout(request):
 
     context = {'items': items, 'order': order, 'cartItems': cartItems}
     return render(request, 'store/checkout.html', context)
+
+def sign_up(request):
+    if request.method == 'POST':
+        sign_up_form = SignUpForm(request.POST)
+        if sign_up_form.is_valid():
+            sign_up_form.save()
+            username = sign_up_form.cleaned_data.get('username')
+            raw_password = sign_up_form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=raw_password)
+            login(request, user)
+            return redirect('store')
+    else:
+        sign_up_form = SignUpForm()
+    return render(request, 'store/signup.html', {'sign_up_form': sign_up_form, 'title': 'Sign Up'})
+
+def log_in(request):
+    if request.method == 'POST':
+        log_in_form = AuthenticationForm(request=request, data=request.POST)
+        if log_in_form.is_valid():
+            username = log_in_form.cleaned_data.get('username')
+            password = log_in_form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('store')
+            else:
+                messages.error(request, "User doesn't exist.")
+    log_in_form = AuthenticationForm()
+    return render(request, 'store/login.html', {'log_in_form': log_in_form, 'title': 'log in'})
+
+def log_out(request):
+    logout(request)
+    return redirect('store')
 
 
 def updateItem(request):

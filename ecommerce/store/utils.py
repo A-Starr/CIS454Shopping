@@ -3,7 +3,6 @@ from .models import *
 
 
 def cookieCart(request):
-    # Create empty cart for now for non-logged in user
     try:
         cart = json.loads(request.COOKIES['cart'])
     except:
@@ -15,7 +14,6 @@ def cookieCart(request):
     cartItems = order['get_cart_items']
 
     for i in cart:
-        # We use try block to prevent items in cart that may have been removed from causing error
         try:
             cartItems += cart[i]['quantity']
 
@@ -43,10 +41,14 @@ def cookieCart(request):
 
 def cartData(request):
     if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        items = order.orderitem_set.all()
-        cartItems = order.get_cart_items
+        # customer = request.user.customer
+        # order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        # items = order.orderitem_set.all()
+        # cartItems = order.get_cart_items
+        cookieData = cookieCart(request)
+        cartItems = cookieData['cartItems']
+        order = cookieData['order']
+        items = cookieData['items']
     else:
         cookieData = cookieCart(request)
         cartItems = cookieData['cartItems']

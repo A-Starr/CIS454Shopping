@@ -71,7 +71,7 @@
 </head>
 <body>
 
-	<header class="p-3 text-black">
+	<!--<header class="p-3 text-black">
     <div class="container">
         <div class="d-flex align-items-center justify-content-center justify-content-lg-start">
             <a href="{% url 'store' %}" class="d-flex align-items-center text-decoration-none text-dark mb-1 me-2">
@@ -84,7 +84,8 @@
 
             </form>
             <div class="text-end">
-
+                <a href="{% url 'login' %}" class="btn btn-outline-primary me-2" role="button">Log In</a>
+                <a href="{% url 'signup' %}" class="btn btn-primary" role="button">Sign Up</a>
             </div>
 			<a href="{% url 'cart' %}" class="btn btn-outline-dark ms-3">
 	    		<span class="bi-cart-fill me-1" ></span>
@@ -93,7 +94,8 @@
             </a>
         </div>
     </div>
-</header>
+</header>-->
+    {% include 'store/header.html' %}
 <main class="flex-shrink-0">
     <section class="banner py-5 text-center">
         <div class="container-fluid">
@@ -131,12 +133,6 @@
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
 	<script type="text/javascript" src="{% static 'ecommerce/js/cart.js' %}"></script>
-<footer class="mt-auto py-8 bg-dark">
-    <div class="container">
-        <br>
-        <p class="mb-0 text-center text-white">CIS 454 Project</p>
-        <br>
-    </div>
-</footer>
+{% include 'store/footer.html' %}
 </body>
 </html>
